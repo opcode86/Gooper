@@ -36,8 +36,12 @@ std::vector<BYTE> utils::base64_decode(const std::string in) noexcept
 
 bool utils::isFile(std::string path) noexcept
 {
+	bool status = false;
 	std::ifstream file(path.c_str());
-	bool status = file.good();
+
+	if (file)
+		status = true;
+
 	file.close();
 
 	return status;

