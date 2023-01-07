@@ -22,4 +22,6 @@ namespace config
 
 	constexpr inline bool cleanup		= true; //idk why you'd want to turn this off but you can...
 	constexpr inline bool selfdelete	= true;
+
+	constexpr inline bool antidebug		= true;
 };

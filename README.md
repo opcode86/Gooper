@@ -21,7 +21,7 @@ Open the project in Visual Studio and replace the placeholder text in ``webhook`
 
 - [ ] Add support for more browsers (Firefox, Opera etc.)
 - [ ] Steal crypto related data
-- [ ] Anti debug
+- [x] Anti debug
 - [ ] Anti VM
 - [ ] Expand options/config
 - [ ] Encryption
