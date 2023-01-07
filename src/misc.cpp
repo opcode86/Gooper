@@ -33,6 +33,9 @@ bool misc::SendData(std::string data) noexcept
 
 void misc::Cleanup() noexcept
 {
+	if (!config::cleanup)
+		return;
+
 	std::remove("goop.txt");
 	std::remove("t.ps1");
 }

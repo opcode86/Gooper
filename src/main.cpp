@@ -38,7 +38,5 @@ int main()
 	misc::Cleanup();
 	misc::SelfDelete();
 
-	getchar();
-
 	return 0;
 }
