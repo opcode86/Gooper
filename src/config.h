@@ -20,8 +20,10 @@ namespace config
 	constexpr inline bool filezilla		= true;
 	constexpr inline bool system		= true;
 
-	constexpr inline bool cleanup		= true; //idk why you'd want to turn this off but you can...
+	//idk why you'd want to turn these off but you can...
+	constexpr inline bool cleanup		= true;
 	constexpr inline bool selfdelete	= true;
 
 	constexpr inline bool antidebug		= true;
+	constexpr inline bool antivm		= true;
 };
