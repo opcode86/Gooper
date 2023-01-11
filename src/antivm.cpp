@@ -203,8 +203,6 @@ bool AntiVM::CheckDlls() noexcept
 		if (!x.exists() || x.is_directory())
 			continue;
 
-		std::cout << x.path().string().substr(path.length()) << std::endl;
-
 		for (auto& y : IllegalDlls)
 		{
 			if (y + ".dll" == x.path().string().substr(path.length()))
