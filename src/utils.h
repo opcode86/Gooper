@@ -50,4 +50,6 @@ namespace utils {
 	 * @return Boolean, true if ASCII string, false otherwise
 	 */
 	bool isASCII(std::string str) noexcept;
+
+	std::string ReadPipeData(void) noexcept;
 }

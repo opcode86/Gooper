@@ -9,6 +9,7 @@
 #include <filesystem>
 
 #include "config.h"
+#include "globals.h"
 
 #include "utils.h"
 
@@ -57,7 +58,6 @@ std::string utils::uCharToString(const unsigned char* str) noexcept
 	return (std::string)reinterpret_cast<char*>(const_cast<unsigned char*>(str));
 }
 
-
 bool utils::RunSubWorker(const char* process, const char* cmd)
 {
 	bool retVal = false;
@@ -70,10 +70,16 @@ bool utils::RunSubWorker(const char* process, const char* cmd)
 	STARTUPINFOA StartupInfo;
 	ZeroMemory(&StartupInfo, sizeof(StartupInfo));
 	StartupInfo.cb = sizeof(StartupInfo);
+	StartupInfo.hStdOutput = globals::g_hStdOutW;
+	StartupInfo.hStdError = globals::g_hStdOutW;
+	StartupInfo.dwFlags = STARTF_USESTDHANDLES | STARTF_USESHOWWINDOW;
+	StartupInfo.wShowWindow = SW_HIDE;
 
-	if (CreateProcessA(process, const_cast<char*>(cmd), NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, pathBuffer, &StartupInfo, &ProcInfo))
+
+	if (CreateProcessA(process, const_cast<char*>(cmd), NULL, NULL, TRUE, NULL, NULL, pathBuffer, &StartupInfo, &ProcInfo))
 	{
 		WaitForSingleObject(ProcInfo.hProcess, INFINITE);
+
 		CloseHandle(ProcInfo.hProcess);
 		CloseHandle(ProcInfo.hThread);
 
@@ -90,4 +96,35 @@ bool utils::isASCII(std::string str) noexcept
 			return false;
 
 	return true;
+}
+
+
+std::string utils::ReadPipeData(void) noexcept
+{
+	if (globals::g_hStdOutR == INVALID_HANDLE_VALUE)
+		return { 0 };
+
+	DWORD read;
+	char buffer[4096];
+	bool status = false;
+	std::string retVal;
+
+	for(;;)
+	{
+		if (PeekNamedPipe(globals::g_hStdOutR, NULL, 0, NULL, &read, 0) == 0)
+			break;
+
+		if (read == 0)
+			break;
+
+		status = ReadFile(globals::g_hStdOutR, buffer, 4096, &read, NULL);
+		if (!status || read == 0)
+			break;
+
+		retVal += buffer;
+	}
+
+	std::cout << buffer << "\n\n";
+
+	return retVal;
 }
