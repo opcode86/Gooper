@@ -82,3 +82,12 @@ bool utils::RunSubWorker(const char* process, const char* cmd)
 
 	return retVal;
 }
+
+bool utils::isASCII(std::string str) noexcept
+{
+	for (auto x : str)
+		if (static_cast<unsigned char>(x) > 127)
+			return false;
+
+	return true;
+}

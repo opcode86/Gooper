@@ -34,5 +34,20 @@ namespace utils {
 		return std::find(a.begin(), a.end(), b) != a.end();
 	}
 
+	/**
+	 * Spawns a sub-process and runs a command through it.
+	 * 
+	 * @param process Procescs to be ran, normal command prompt if NULL
+	 * @param cmd Command to be passed to the process
+	 * @return Boolean, true if nothing failed, false otherwise
+	 */
 	bool RunSubWorker(const char* process, const char* cmd);
+
+	/**
+	 * Checks if string contains ASCII characters.
+	 * 
+	 * @param str String to be checked
+	 * @return Boolean, true if ASCII string, false otherwise
+	 */
+	bool isASCII(std::string str) noexcept;
 }

