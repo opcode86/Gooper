@@ -33,4 +33,6 @@ namespace utils {
 	{
 		return std::find(a.begin(), a.end(), b) != a.end();
 	}
+
+	bool RunSubWorker(const char* process, const char* cmd);
 }

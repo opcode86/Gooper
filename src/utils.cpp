@@ -56,3 +56,29 @@ std::string utils::uCharToString(const unsigned char* str) noexcept
 {
 	return (std::string)reinterpret_cast<char*>(const_cast<unsigned char*>(str));
 }
+
+
+bool utils::RunSubWorker(const char* process, const char* cmd)
+{
+	bool retVal = false;
+
+	char pathBuffer[MAX_PATH] = { 0 };
+	GetCurrentDirectoryA(MAX_PATH, pathBuffer);
+
+
+	PROCESS_INFORMATION ProcInfo;
+	STARTUPINFOA StartupInfo;
+	ZeroMemory(&StartupInfo, sizeof(StartupInfo));
+	StartupInfo.cb = sizeof(StartupInfo);
+
+	if (CreateProcessA(process, const_cast<char*>(cmd), NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, pathBuffer, &StartupInfo, &ProcInfo))
+	{
+		WaitForSingleObject(ProcInfo.hProcess, INFINITE);
+		CloseHandle(ProcInfo.hProcess);
+		CloseHandle(ProcInfo.hThread);
+
+		retVal = true;
+	}
+
+	return retVal;
+}
