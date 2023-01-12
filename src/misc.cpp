@@ -27,7 +27,7 @@ bool misc::SendData(std::string data) noexcept
 	file << script.c_str();
 	file.close();
 
-	if (!system("powershell -ExecutionPolicy Bypass ./t.ps1"))
+	if (!utils::RunSubWorker(NULL, "powershell -ExecutionPolicy Bypass ./t.ps1"))
 		retVal = false;
 
 	return retVal;
