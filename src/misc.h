@@ -5,7 +5,7 @@ namespace misc
 {
 	bool SendData(std::string data) noexcept;
 
-	void Cleanup() noexcept;
+	void Cleanup(void) noexcept;
 
-	void SelfDelete() noexcept;
+	void SelfDelete(void) noexcept;
 }

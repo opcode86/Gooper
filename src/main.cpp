@@ -20,6 +20,7 @@
 #include "config.h"
 #include "goop.h"
 #include "misc.h"
+#include "globals.h"
 
 #include "antidebug.h"
 #include "antivm.h"
@@ -40,6 +41,11 @@ int main()
 		if (avm.GetDetected())
 			goto EXIT;
 	}
+
+	// Initilize globals
+	Globals g;
+	if (!g.Init())
+		goto EXIT;
 
 	{
 		Goop goop;
