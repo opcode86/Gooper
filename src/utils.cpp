@@ -111,7 +111,7 @@ std::string utils::ReadPipeData(void) noexcept
 
 	for(;;)
 	{
-		if (PeekNamedPipe(globals::g_hStdOutR, NULL, 0, NULL, &read, 0) == 0)
+		if (!PeekNamedPipe(globals::g_hStdOutR, NULL, 0, NULL, &read, 0))
 			break;
 
 		if (read == 0)
