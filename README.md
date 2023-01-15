@@ -10,21 +10,21 @@ Gooper is a data stealer written in C++ that collects data from a target and com
  <li>Steals stored FileZilla logins</li>
  <li>Collects basic system information</li>
  <li>Deletes itself after execution</li>
+ <li>VM Detection</li>
+ <li>Debugger detection</li>
+ <li>Compile time string obfuscation</li>
 </ul>
 
 ***
 ## **Usage**
-Open the project in Visual Studio and replace the placeholder text in ``webhook`` with your own discord webhook.
+Open the project in Visual Studio and replace the placeholder text in the ``WEBHOOK`` macro with your own discord webhook then compile for release/x64.
 
 ***
 ## **Todo**
 
 - [ ] Add support for more browsers (Firefox, Opera etc.)
 - [ ] Steal crypto related data
-- [x] Anti debug
-- [x] Anti VM
 - [ ] Expand options/config
-- [ ] Encryption
 - [ ] Make builder
 - [ ] Improve self-deletion functionality
 - [ ] Rewrite communication functionality

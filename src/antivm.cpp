@@ -9,10 +9,10 @@
 #include "config.h"
 
 std::vector<std::string> IllegalDrivers = {
-	"VBoxSF",
-	"VBoxGuest",
-	"VBoxMouse",
-	"VBoxWddm"
+	OBF("VBoxSF"),
+	OBF("VBoxGuest"),
+	OBF("VBoxMouse"),
+	OBF("VBoxWddm")
 };
 
 std::vector<int> ScreenHeights = {
@@ -40,25 +40,25 @@ std::vector<int> ScreenWidths = {
 	1024
 };
 
-std::vector<std::wstring> IllegalVendors = {
-	L"VID_80EE", //VirtualBox
-	L"PNP0F03"  //Unitek UPS Systems Alpha 1200Sx
+std::vector<std::string> IllegalVendors = {
+	OBF("VID_80EE"), //VirtualBox
+	OBF("PNP0F03")  //Unitek UPS Systems Alpha 1200Sx
 };
 
 std::vector<std::string> IllegalDlls = {
-	"SbieDll",
-	"SxIn",
-	"Sd2",
-	"snxhk",
-	"cmdvrt32",
-	"VBoxDispD3D",
-	"VBoxGL",
-	"VBoxHook",
-	"VBoxICD",
-	"VBoxMRXNP",
-	"VBoxNine",
-	"VBoxSVGA",
-	"VBoxTray"
+	OBF("SbieDll"),
+	OBF("SxIn"),
+	OBF("Sd2"),
+	OBF("snxhk"),
+	OBF("cmdvrt32"),
+	OBF("VBoxDispD3D"),
+	OBF("VBoxGL"),
+	OBF("VBoxHook"),
+	OBF("VBoxICD"),
+	OBF("VBoxMRXNP"),
+	OBF("VBoxNine"),
+	OBF("VBoxSVGA"),
+	OBF("VBoxTray")
 };
 
 AntiVM::AntiVM()
@@ -101,7 +101,7 @@ bool AntiVM::CheckDrivers() noexcept
 		{
 			if (K32GetDeviceDriverBaseNameA(i, buffer, sizeof(buffer)))
 				for (auto x : IllegalDrivers)
-					if ((char*)buffer == x + ".sys")
+					if ((char*)buffer == x + OBF(".sys"))
 					{
 						this->detected = true;
 						return true;
@@ -173,14 +173,14 @@ bool AntiVM::CheckDeviceVendors() noexcept
 	for (int i = 0; i < (int)devices; i++)
 	{
 		UINT numChars = 0u;
-		GetRawInputDeviceInfoW(deviceList[i].hDevice, RIDI_DEVICENAME, nullptr, &numChars);
+		GetRawInputDeviceInfoA(deviceList[i].hDevice, RIDI_DEVICENAME, nullptr, &numChars);
 
-		std::wstring test(numChars, 0);
-		GetRawInputDeviceInfoW(deviceList[i].hDevice, RIDI_DEVICENAME, test.data(), &numChars);
+		std::string test(numChars, 0);
+		GetRawInputDeviceInfoA(deviceList[i].hDevice, RIDI_DEVICENAME, test.data(), &numChars);
 
 		for (auto x : IllegalVendors)
 		{
-			if (test.find(x) != std::wstring::npos)
+			if (test.find(x) != std::string::npos)
 			{
 				free(deviceList);
 
@@ -196,7 +196,7 @@ bool AntiVM::CheckDeviceVendors() noexcept
 
 bool AntiVM::CheckDlls() noexcept
 {
-	std::string path = "C:\\Windows\\System32\\";
+	std::string path = OBF("C:\\Windows\\System32\\");
 
 	for (auto& x : std::filesystem::directory_iterator(path))
 	{

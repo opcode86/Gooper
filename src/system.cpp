@@ -21,11 +21,11 @@ void System::GetSystemInfo() noexcept
 
 
 	if (GetComputerNameA(buffer, &size))
-		this->data.append("SYSTEM NAME: " + std::string(buffer) + "\n");
+		this->data.append(OBF("SYSTEM NAME: ") + std::string(buffer) + OBF_ENDL);
 
 	if(GetUserNameA(buffer, &size))
-		this->data.append("USER: " + std::string(buffer) + "\n");
+		this->data.append(OBF("USER: ") + std::string(buffer) + OBF_ENDL);
 
 	if(GetCurrentHwProfileA(&hwProfile))
-		this->data.append("HARDWARE PROFILE GUID: " + std::string(hwProfile.szHwProfileGuid) + "\n");
+		this->data.append(OBF("HARDWARE PROFILE GUID: ") + std::string(hwProfile.szHwProfileGuid) + OBF_ENDL);
 }

