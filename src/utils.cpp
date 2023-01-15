@@ -13,7 +13,7 @@
 
 #include "utils.h"
 
-static const std::string abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";//=
+static const std::string abc = OBF("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");//=
 
 std::vector<BYTE> utils::base64_decode(const std::string in) noexcept
 {
@@ -123,8 +123,6 @@ std::string utils::ReadPipeData(void) noexcept
 
 		retVal += buffer;
 	}
-
-	std::cout << buffer << "\n\n";
 
 	return retVal;
 }

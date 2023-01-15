@@ -1,11 +1,10 @@
 #pragma once
-
 #include "goopbase.h"
 
 #include "config.h"
 
-// This class is messy...
-class Chrome : public GoopBase {
+class Chrome : public GoopBase 
+{
 public:
 	Chrome(std::string path) noexcept;
 
