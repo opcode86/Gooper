@@ -1,6 +1,6 @@
 # **Gooper**
 ## **Purpose**
-Gooper is a data stealer written in C++ that collects data from a target and communicates the data over discord webhooks. The projevt is intended for educational purposes only and should not be used for harmful activities.
+Gooper is a data stealer written in C++ that collects data from a target and communicates the data over discord webhooks. This project is intended for educational purposes only and should not be used for harmful activities.
 
 ***
 ## **Features**
