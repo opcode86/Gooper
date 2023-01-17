@@ -36,7 +36,7 @@ template<size_t size, size_t key>
 class Obf {
 public:
 	constexpr Obf(const char* str) {
-        for (int i = 0; i < size; i++)
+        for (size_t i = 0; i < size; i++)
             data[i] = str[i];
 
         encrypt(data, size, key);

