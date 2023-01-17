@@ -13,6 +13,7 @@ Gooper is a data stealer written in C++ that collects data from a target and com
  <li>VM Detection</li>
  <li>Debugger detection</li>
  <li>Compile time string obfuscation</li>
+ <li>Random names of temporary files</li>
 </ul>
 
 ***
@@ -25,6 +26,4 @@ Open the project in Visual Studio and replace the placeholder text in the ``WEBH
 - [ ] Add support for more browsers (Firefox, Opera etc.)
 - [ ] Steal crypto related data
 - [ ] Expand options/config
-- [ ] Make builder
 - [ ] Improve self-deletion functionality
-- [ ] Rewrite communication functionality

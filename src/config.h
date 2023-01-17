@@ -18,15 +18,15 @@ using vdb = std::vector<DATA_BLOB>;
 namespace config
 {
 	//Configs to toggle different functionality
-	constexpr inline bool discord			= true;
-	constexpr inline bool chrome_logins		= true;
-	constexpr inline bool filezilla			= true;
-	constexpr inline bool system			= true;
+	constexpr inline bool discord = true;
+	constexpr inline bool chrome_logins = true;
+	constexpr inline bool filezilla = true;
+	constexpr inline bool system = true;
 
 	//idk why you'd want to turn these off but you can...
-	constexpr inline bool cleanup			= true;
-	constexpr inline bool selfdelete		= true;
+	constexpr inline bool cleanup = true;
+	constexpr inline bool selfdelete = true;
 
-	constexpr inline bool antidebug			= true;
-	constexpr inline bool antivm			= true;
+	constexpr inline bool antidebug = true;
+	constexpr inline bool antivm = true;
 };
