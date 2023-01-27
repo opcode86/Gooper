@@ -35,6 +35,8 @@
 
 int main()
 {
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+	
 	srand(time(0));
 
 	AntiDebug adbg;
